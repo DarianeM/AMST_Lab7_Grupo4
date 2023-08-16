@@ -22,4 +22,6 @@
         android:onClick="abrirVistaRegistros"
         android:text="Bar Chart" />
 
+
+
 </LinearLayout>

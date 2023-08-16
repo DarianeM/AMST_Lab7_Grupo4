@@ -1,16 +1,26 @@
 package com.amst.lab7_grupo4;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -39,6 +49,7 @@ public class Registros extends AppCompatActivity {
     private Map<String, TextView> temperaturasTVs;
     private Map<String, TextView> fechasTVs;
     private Registros contexto;
+    public EditText edtxTemp,edtx_delete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,5 +198,94 @@ public class Registros extends AppCompatActivity {
         graficoBarras.invalidate();
 
         new Handler(Looper.getMainLooper()).postDelayed(() -> solicitarTemperaturas(), 3000);
+    }
+
+    public void agregarTemperatura(View view){
+        edtxTemp = findViewById(R.id.edtx_temp);
+        Float edtTemp = Float.parseFloat(edtxTemp.getText().toString());
+
+        if (!edtTemp.equals(null)){
+
+            Map<String,Float> paramsFloat = new HashMap();
+            paramsFloat.put("value",edtTemp);
+
+            JSONObject parametros = new JSONObject(paramsFloat);
+            try{
+                parametros.put("key","temperatura");
+            }catch (JSONException e){
+                throw new RuntimeException();
+            }
+
+            String url_post = "https://amst-lab-api.herokuapp.com/api/lecturas";
+            JsonObjectRequest request = new JsonObjectRequest(
+                    Request.Method.POST, url_post, parametros,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            System.out.println(response);
+                            try {
+                                Toast.makeText(Registros.this, "Datos subidos", Toast.LENGTH_SHORT).show();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    AlertDialog alertDialog = new AlertDialog.Builder(Registros.this).create();
+                    alertDialog.setTitle("Alerta");
+                    alertDialog.setMessage("Error de Conexion");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+            });
+            ListaRequest.add(request);
+        }
+    }
+
+    public void eliminarDato(View view){
+        edtx_delete = findViewById(R.id.edtx_delete);
+        Integer edtDelete = Integer.parseInt(edtx_delete.getText().toString());
+
+        if (!edtDelete.equals(null)){
+
+            String url_delete = "https://amst-lab-api.herokuapp.com/api/lecturas/"+edtDelete;
+            StringRequest request = new StringRequest(
+                    Request.Method.DELETE, url_delete,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            System.out.println(response);
+                            try {
+                                Toast.makeText(Registros.this, "Dato Eliminado", Toast.LENGTH_SHORT).show();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            AlertDialog alertDialog = new AlertDialog.Builder(Registros.this).create();
+                            alertDialog.setTitle("Alerta");
+                            alertDialog.setMessage("Error de Conexion");
+                            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                            alertDialog.show();
+                        }
+                    });
+            ListaRequest.add(request);
+        }
     }
 }

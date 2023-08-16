@@ -7,7 +7,6 @@
     tools:context=".Registros">
 
     <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:fillViewport="true"
@@ -65,10 +64,79 @@
             <LinearLayout
                 android:id="@+id/cont_temperaturas"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical" >
             </LinearLayout>
+
+            <RelativeLayout
+                android:orientation="vertical"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="center|bottom">
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent">
+
+                        <EditText
+                            android:id="@+id/edtx_temp"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:layout_weight="1"
+                            android:layout_margin="5dp"
+                            android:inputType="numberDecimal"
+                            android:hint="20.5"
+                            android:textAlignment="center"/>
+                        <Button
+                            android:id="@+id/btn_add_temp"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Agregar Temperatura"
+                            android:layout_weight="1"
+                            android:layout_margin="5dp"
+                            android:onClick="agregarTemperatura"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent">
+
+                        <EditText
+                            android:id="@+id/edtx_delete"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:layout_weight="1"
+                            android:layout_margin="5dp"
+                            android:inputType="numberSigned"
+                            android:hint="ID"
+                            android:textAlignment="center"/>
+                        <Button
+                            android:id="@+id/btn_delete_temp"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Eliminar Temperatura"
+                            android:layout_weight="1"
+                            android:layout_margin="5dp"
+                            android:onClick="eliminarDato"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
         </LinearLayout>
+
+
+
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
